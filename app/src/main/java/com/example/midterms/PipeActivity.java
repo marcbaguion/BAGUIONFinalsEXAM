@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.Switch;
 
 public class PipeActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class PipeActivity extends AppCompatActivity {
 
     // TODO Milestone A: implement night mode
     private void initializeNightMode(boolean night) {
+
+
 
     }
 

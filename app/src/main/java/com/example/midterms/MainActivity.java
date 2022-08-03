@@ -1,7 +1,12 @@
 package com.example.midterms;
 
 import static com.example.midterms.Bill.*;
-
+import static com.example.midterms.Bill.KEY_PREVIOUS_COLUMN;
+import static com.example.midterms.Bill.KEY_CURRENT_COLUMN;
+import static com.example.midterms.Bill.KEY_BRAND_COLUMN;
+import static com.example.midterms.Bill.KEY_DIAMETER_COLUMN;
+import static com.example.midterms.Bill.KEY_PACK_COLUMN;
+import static com.example.midterms.Bill.KEY_MONTH_COLUMN;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -206,6 +211,18 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
                 etResult.setText(bill + "");
                 etPrev.setText(curr + "");
                 etNext.setText("");
+
+                ContentValues cv = new ContentValues();
+                cv.put(KEY_PREVIOUS_COLUMN,prev);
+                cv.put(KEY_CURRENT_COLUMN,curr);
+                cv.put(KEY_BRAND_COLUMN,pipe_brand);
+                cv.put(KEY_DIAMETER_COLUMN,pipe_diameter);
+                cv.put(KEY_PACK_COLUMN,pack);
+                cv.put(KEY_MONTH_COLUMN,month);
+
+                ContentResolver cr = getContentResolver();
+                Uri uri = cr.insert(BillsContentProvider.CONTENT_URI,cv);
+                String rowID = uri.getPathSegments().get(1);
 
                 // TODO Milestone 2-3: use Content Resolver here and use Content Values
                 //  to insert all data in columns into the database as defined in Bill.java class

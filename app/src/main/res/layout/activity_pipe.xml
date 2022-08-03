@@ -83,4 +83,10 @@
         android:layout_height="wrap_content"
         android:text="Confirm" />
 
+    <Switch
+        android:id="@+id/swNightMode"
+        android:layout_width="296dp"
+        android:layout_height="wrap_content"
+        android:text="Switch" />
+
 </LinearLayout>
