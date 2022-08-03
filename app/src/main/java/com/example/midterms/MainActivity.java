@@ -44,7 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 // TODO Milestone 3-1: implement LoaderManager.LoaderCallbacks<Cursor>
-public class MainActivity extends AppCompatActivity implements BillDialogFragment.ErrorDialogListener {
+public class MainActivity extends AppCompatActivity implements BillDialogFragment.ErrorDialogListener, LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String PREF_NIGHT = "NIGHT";
     ArrayList<Bill> bills;
     BillsAdapter billsAdapter;
     int month;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
         setContentView(R.layout.activity_main);
         preferences = getSharedPreferences("vincepref", MODE_PRIVATE);
         editor = preferences.edit();
+        boolean night = preferences.getBoolean(PREF_NIGHT, false);
         bills = new ArrayList<>();
         month = 1;
         last_consumption = 0;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
         setHistoryAdapter();
         nightModeListenerMethod();
         btnPipeListenerMethod();
+        initialNightMode(night);
 
         // TODO Milestone 3-3: use initLoader() here
     }
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
     @Override
     protected void onStart() {
         super.onStart();
-        initialNightMode();
+
     }
 
     @Override
@@ -104,11 +107,11 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
         // TODO Milestone 3-4: use restartLoader() here
     }
 
-    private void initialNightMode() {
+    private void initialNightMode(boolean night) {
         Switch swNight = findViewById(R.id.swNight);
         int[] textviews = {R.id.swNight, R.id.tvTitle, R.id.rbRegular, R.id.rbBasic, R.id.rbPremium, R.id.tvLblPackage, R.id.tvLblPipe, R.id.tvPipe, R.id.tvLblPrev, R.id.tvLblNew, R.id.tvLblHistory, R.id.tvLblBill, R.id.etResult, R.id.etPrev, R.id.etNew};
         ConstraintLayout clMain = findViewById(R.id.clMain);
-        boolean night = preferences.getBoolean("night", false);
+
         if (night) {
             clMain.setBackgroundColor(Color.BLACK);
             swNight.setChecked(true);
@@ -135,14 +138,14 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
                 int[] textviews = {R.id.swNight, R.id.tvTitle, R.id.rbRegular, R.id.rbBasic, R.id.rbPremium, R.id.tvLblPackage, R.id.tvLblPipe,R.id.tvPipe, R.id.tvLblPrev, R.id.tvLblNew, R.id.tvLblHistory, R.id.tvLblBill, R.id.etResult, R.id.etPrev, R.id.etNew};
                 ConstraintLayout clMain = findViewById(R.id.clMain);
                 if (swNight.isChecked()) {
-                    editor.putBoolean("night", true);
+                    editor.putBoolean(PREF_NIGHT, true);
                     clMain.setBackgroundColor(Color.BLACK);
                     for (int res : textviews) {
                         TextView view1 = findViewById(res);
                         view1.setTextColor(Color.WHITE);
                     }
                 } else {
-                    editor.putBoolean("night", false);
+                    editor.putBoolean(PREF_NIGHT, false);
                     clMain.setBackgroundColor(Color.WHITE);
                     for (int res : textviews) {
                         TextView view1 = findViewById(res);
@@ -243,6 +246,34 @@ public class MainActivity extends AppCompatActivity implements BillDialogFragmen
     public void onNoListenerMethod(DialogFragment dialog) {
         EditText etNext = findViewById(R.id.etNew);
         etNext.setText("");
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        CursorLoader loader = new CursorLoader(this, BillsContentProvider.CONTENT_URI,null,null,null,null);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        int INDEX_PREV = cursor.getColumnIndexOrThrow(KEY_PREVIOUS_COLUMN);
+        int INDEX_CURR = cursor.getColumnIndexOrThrow(KEY_CURRENT_COLUMN);
+        int INDEX_BRAND = cursor.getColumnIndexOrThrow(KEY_BRAND_COLUMN);
+        int INDEX_DIAMETER = cursor.getColumnIndexOrThrow(KEY_DIAMETER_COLUMN);
+        int INDEX_PACK = cursor.getColumnIndexOrThrow(KEY_PACK_COLUMN);
+        int INDEX_MONTH = cursor.getColumnIndexOrThrow(KEY_MONTH_COLUMN);
+        while (cursor.moveToNext()){
+            int prev = cursor.getInt(INDEX_PREV);
+            int curr = cursor.getInt(INDEX_CURR);
+            int pack = cursor.getInt(INDEX_PACK);
+            int month = cursor.getInt(INDEX_MONTH);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 
     // TODO Milestone 3-2: implement Cursor Loader inherited methods

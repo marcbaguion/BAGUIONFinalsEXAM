@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 
 public class BillsContentProvider extends ContentProvider {
     public static final Uri CONTENT_URI =
-            Uri.parse("content://com.example.notesserato.notesprovider/notes");
+            Uri.parse("content://com.example.midterms.BillsContentProvider/notes");
     public static final int ALL_ROWS = 1;
     public static final int SINGLE_ROW = 2;
     private BillsOpenHelper helper;
@@ -29,8 +29,8 @@ public class BillsContentProvider extends ContentProvider {
 
     static {
         matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        matcher.addURI("com.example.notesserato.notesprovider", "notes", ALL_ROWS);
-        matcher.addURI("com.example.notesserato.notesprovider", "notes/#", SINGLE_ROW);
+        matcher.addURI("com.example.midterms.BillsContentProvider", "notes", ALL_ROWS);
+        matcher.addURI("com.example.midterms.BillsContentProvider", "notes/#", SINGLE_ROW);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class BillsContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         switch (matcher.match(uri)) {
             case SINGLE_ROW:
-                return "vnd.android.cursor.item/vnd.example.notes";
+                return "vnd.android.cursor.item/vnd.example.Bill";
             case ALL_ROWS:
-                return "vnd.android.cursor.dir/vnd.example.notes";
+                return "vnd.android.cursor.dir/vnd.example.Bill";
             default:
                 throw new IllegalArgumentException("Unsupported URI" + uri);
         }
