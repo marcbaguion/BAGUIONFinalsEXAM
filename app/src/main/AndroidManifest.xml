@@ -16,8 +16,13 @@
         <!--   TODO: Milestone 2-2: add provider here     -->
         <activity
             android:name=".PipeActivity"
-            android:exported="false">
+            android:exported="true">
             <!--    TODO Milestone D: add meta-data here    -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
