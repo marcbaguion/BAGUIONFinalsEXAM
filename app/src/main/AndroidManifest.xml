@@ -20,13 +20,11 @@
             />
         <activity
             android:name=".PipeActivity"
-            android:exported="true">
-            <!--    TODO Milestone D: add meta-data here    -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
             <!--    TODO Milestone D: add meta-data here    -->
         </activity>
         <activity
